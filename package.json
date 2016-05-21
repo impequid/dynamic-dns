@@ -1,0 +1,26 @@
+{
+  "name": "dyndekeract",
+  "version": "0.0.1",
+  "description": "simple cloudflare dyndns service",
+  "main": "build/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dodekeract/dyndns.git"
+  },
+  "keywords": [
+    "dyndns",
+    "cloudflare"
+  ],
+  "author": "Florian Wendelborn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dodekeract/dyndns/issues"
+  },
+  "homepage": "https://github.com/dodekeract/dyndns#readme",
+  "dependencies": {
+    "cloudflare": "^1.0.0"
+  }
+}
