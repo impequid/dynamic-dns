@@ -1,10 +1,18 @@
 {
-  "name": "dyndekeract",
+  "name": "impequid-dyndns",
   "version": "0.0.1",
-  "description": "simple cloudflare dyndns service",
+  "description": "Impequid app for CloudFlare-based DynDNS servers.",
   "main": "build/",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run copy --silent && npm run compile --silent && npm run bundle-captcha --silent && npm run bundle-main --silent",
+    "bundle-main": "webpack --progress --colors build/client/apps/main.js build/client/bundle/main.js",
+    "bundle-captcha": "webpack --progress --colors build/client/apps/captcha.js build/client/bundle/captcha.js",
+    "copy": "cp -r source/client/styles/ build/client/",
+    "compile": "babel --plugins transform-async-to-generator --presets es2015,react source/ -d build/",
+    "prepublish": "npm run build",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
+    "start": "node build/server",
+    "watch": "nodemon -e js,jsx --watch source/ --exec \"npm run build --silent && npm run start --silent\""
   },
   "repository": {
     "type": "git",
@@ -12,7 +20,10 @@
   },
   "keywords": [
     "dyndns",
-    "cloudflare"
+    "cloudflare",
+    "impequid",
+    "dynamic",
+    "dns"
   ],
   "author": "Florian Wendelborn",
   "license": "MIT",
@@ -21,6 +32,35 @@
   },
   "homepage": "https://github.com/dodekeract/dyndns#readme",
   "dependencies": {
-    "cloudflare": "^1.0.0"
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-polyfill": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "cloudflare": "^1.0.1",
+    "flux": "^2.1.1",
+    "koa": "^1.2.0",
+    "koa-body": "^1.4.0",
+    "koa-generic-session": "^1.10.2",
+    "koa-generic-session-mongo": "^0.2.5",
+    "koa-router": "^5.4.0",
+    "koa-session": "^3.3.1",
+    "koa-session-mongoose": "^1.0.0",
+    "koa-static": "^2.0.0",
+    "mongoose": "^4.4.19",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "react-gcaptcha": "^3.0.0",
+    "react-mini-router": "^2.0.0",
+    "react-recaptcha": "^2.1.1",
+    "recaptcha-validator": "^1.0.6",
+    "rx": "^4.1.0",
+    "superagent": "^2.0.0",
+    "validator": "^5.3.0",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "nodemon": "^1.9.2"
   }
 }
