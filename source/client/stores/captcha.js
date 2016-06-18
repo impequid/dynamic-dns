@@ -40,24 +40,28 @@ dispatcher.register(action => {
 			_state.links = action.data.links;
 		break;
 		case constants.SUBMIT:
-			request
-				.post('/api/authenticate/finish')
-				.send({
-					server: _state.server,
-					token: _state.token,
-					captcha: _state.captcha
-				})
-				.end((error, response) => {
-					if (!error) {
-						console.log(response);
-						if (response.statusCode === 200) {
-							console.log('redirecting');
-							location.pathname = '/dashboard';
+			if (_state.accepted) {
+				request
+					.post('/api/authenticate/finish')
+					.send({
+						server: _state.server,
+						token: _state.token,
+						captcha: _state.captcha
+					})
+					.end((error, response) => {
+						if (!error) {
+							console.log(response);
+							if (response.statusCode === 200) {
+								console.log('redirecting');
+								location.pathname = '/dashboard';
+							}
+						} else {
+							console.error(error);
 						}
-					} else {
-						console.error(error);
-					}
-				});
+					});
+			} else {
+				alert('You need to accept the privacy policy and terms of service');
+			}
 		break;
 		case constants.UPDATE:
 			_state.captcha = action.value;
