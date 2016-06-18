@@ -11,7 +11,7 @@ import config from './config';
 
 let cloudflare, zoneID;
 
-export function initialize () {
+function initialize () {
 	cloudflare = new CloudFlare({
 		email: config.cloudflare.email,
 		key: config.cloudflare.token
@@ -45,27 +45,27 @@ function createRecord (subdomain, ip) {
 	});
 };
 
-export function setIP (subdomain, ip) {
+/**
+ * @description set subdomain entry IP
+ */
+export function setIP ({subdomain, ip}) {
 	return new Promise((resolve, reject) => {
 		cloudflare.browseDNS(zoneID, {
 			name: `${subdomain}.${config.domain}`
-		}).then((dns) => {
-			var found = false;
-			dns.result.forEach((record) => {
-				if (record.name === `${subdomain}.${config.domain}` && !found) {
-					found = true;
-					record.content = ip;
-					record.type = isIP(ip, 4) ? 'A' : 'AAAA';
-					cloudflare.editDNS(record).then((data) => {
-						resolve(data);
-					}).catch((error) => {
-						console.error(error);
-						reject(error);
-					});
-				}
-			});
-			if (!found) {
-				var record = createRecord(subdomain, ip);
+		}).then(dns => {
+			if (dns.result.length) {
+				const record = dns.result[0];
+
+				record.content = ip;
+				record.type = isIP(ip, 4) ? 'A' : 'AAAA';
+				cloudflare.editDNS(record).then((data) => {
+					resolve(data);
+				}).catch((error) => {
+					console.error(error);
+					reject(error);
+				});
+			} else {
+				const record = createRecord(subdomain, ip);
 				cloudflare.addDNS(record).then((data) => {
 					console.log(`registered new subdomain ${data.name}`);
 					resolve(data);
@@ -74,9 +74,33 @@ export function setIP (subdomain, ip) {
 					reject(error);
 				});
 			}
-		}).catch((error) => {
+		}).catch(error => {
 			console.error(error);
 			reject(error);
+		});
+	});
+}
+
+/**
+ * @description remove subdomain entry from cloudflare
+ */
+export function remove ({subdomain}) {
+	return new Promise((resolve, reject) => {
+		cloudflare.browseDNS(zoneID, {
+			name: `${subdomain}.${config.domain}`
+		}).then(dns => {
+			if (dns.result.length) {
+				const record = dns.result[0];
+				cloudflare.deleteDNS(record).then(data => {
+					resolve('success');
+				}).catch(error => {
+					reject('could not delete entry from cloudflare');
+				});
+			} else {
+				resolve('didn\'t exist');
+			}
+		}).catch(error => {
+			reject('could not search dns record');
 		});
 	});
 }
@@ -84,8 +108,8 @@ export function setIP (subdomain, ip) {
 // export
 
 const exported = {
-	initialize,
-	setIP
+	setIP,
+	remove
 };
 
 export default exported;

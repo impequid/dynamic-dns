@@ -41,7 +41,7 @@ dispatcher.register(action => {
 		break;
 		case constants.SUBMIT:
 			request
-				.post('/authenticate/finish')
+				.post('/api/authenticate/finish')
 				.send({
 					server: _state.server,
 					token: _state.token,
@@ -52,7 +52,7 @@ dispatcher.register(action => {
 						console.log(response);
 						if (response.statusCode === 200) {
 							console.log('redirecting');
-							location.pathname = '/';
+							location.pathname = '/dashboard';
 						}
 					} else {
 						console.error(error);

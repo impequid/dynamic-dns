@@ -47,6 +47,25 @@
 }
 
 /* custom */
+
+/* sections */
+.custom-dashboard {
+	background-color: #ffee80;
+}
+
+/* other */
 .custom-noradius {
 	border-radius: 0;
+}
+
+.custom-navbar {
+	margin-top: -32px;
+}
+
+.custom-2-buttons {
+	width: 50%;
+}
+
+.custom-3-buttons {
+	width: 33.33333333333%;
 }

@@ -1,11 +1,11 @@
 // import internal
 import {User} from './models';
 
-export function getUser (options) {
+export function getUser ({impequidId, impequidServer}) {
 	return new Promise((resolve, reject) => {
 		User.findOne({
-			name: options.user,
-			server: options.server
+			impequidId,
+			impequidServer
 		}, (err, user) => {
 			if (!err && user !== null) {
 				resolve(user);
@@ -16,17 +16,38 @@ export function getUser (options) {
 	});
 }
 
-export function setUser (options) {
+export function setUser ({impequidId, impequidServer, impequidToken}) {
+
 	return new Promise((resolve, reject) => {
 		const user = new User({
-			impequid: options.impequid
+			impequidId,
+			impequidServer,
+			impequidToken
 		});
 
 		user.save(error => {
 			if (!error) {
 				resolve(user);
 			} else {
-				reject(error);
+				User.findOne({
+					impequidId,
+					impequidServer
+				}, (error, doc) => {
+					if (!error && doc !== null) {
+
+						// update token
+						doc.impequidToken = impequidToken;
+						doc.save((error, data) => {
+							if (!error) {
+								resolve(data);
+							} else {
+								reject(error);
+							}
+						});
+					} else {
+						reject(error);
+					}
+				});
 			}
 		});
 	});

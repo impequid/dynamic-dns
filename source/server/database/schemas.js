@@ -1,27 +1,30 @@
 // import external
-import {default as mongoose, Schema} from 'mongoose';
-import {isEmail, isAlphanumeric, isHexadecimal} from 'validator';
+import {Schema} from 'mongoose';
+import {isAlphanumeric, isHexadecimal, isIP} from 'validator';
 
 // schemas
 export const userSchema = new Schema({
-	impequid: {
-		server: {
-			type: String,
-			required: true
-		},
-		id: {
-			type: String,
-			required: true,
-			validate: [isAlphanumeric, 'invalid id']
-		},
-		token: {
-			type: String,
-			required: true,
-			validate: [isHexadecimal, 'invalid token']
-		}
+	impequidServer: {
+		type: String,
+		required: true
+	},
+	impequidId: {
+		type: String,
+		required: true,
+		validate: [isAlphanumeric, 'invalid id']
+	},
+	impequidToken: {
+		type: String,
+		required: true,
+		validate: [isHexadecimal, 'invalid token']
 	}
 });
-userSchema.index({impequid: {name: 1, server: 1}}, {unique: true});
+userSchema.index({
+	impequidId: 1,
+	impequidServer: 1
+}, {
+	unique: true
+});
 
 export const domainSchema = new Schema({
 	user: {
@@ -39,5 +42,9 @@ export const domainSchema = new Schema({
 		unique: true,
 		required: true,
 		validate: [isHexadecimal, 'invalid token']
+	},
+	ip: {
+		type: String,
+		validate: [isIP, 'invalid IP']
 	}
 });

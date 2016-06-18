@@ -12,7 +12,7 @@
     "prepublish": "npm run build",
     "postpublish": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
     "start": "node build/server",
-    "watch": "nodemon -e js,jsx --watch source/ --exec \"npm run build --silent && npm run start --silent\""
+    "watch": "nodemon -e js,jsx,css,json --watch source/ --exec \"npm run build --silent && npm run start --silent\""
   },
   "repository": {
     "type": "git",

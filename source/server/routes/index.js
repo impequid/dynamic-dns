@@ -11,22 +11,34 @@ router.get('/favicon.ico', function * () {
 	this.redirect('https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/12-cube.svg/64px-12-cube.svg.png');
 });
 
-/* /domains */
+/* /api/domains */
 
-import domainRouter from './domains';
-router.use('/domains', domainRouter.routes(), domainRouter.allowedMethods());
+import domainRouter from './api/domains';
+router.use('/api/domain', domainRouter.routes(), domainRouter.allowedMethods());
 
-/* /update */
-import updateRouter from './update';
-router.use('/update', updateRouter.routes(), updateRouter.allowedMethods());
+/* /api/update */
 
-/* /authenticate */
-import authenticateRouter from './authenticate';
-router.use('/authenticate', authenticateRouter.routes(), authenticateRouter.allowedMethods());
+import updateRouter from './api/update';
+router.use('/api/update', updateRouter.routes(), updateRouter.allowedMethods());
+
+/* /api/authenticate */
+
+import authenticateRouter from './api/authenticate';
+router.use('/api/authenticate', authenticateRouter.routes(), authenticateRouter.allowedMethods());
+
+/* /api/fallback */
+
+import fallbackRouter from './api/fallback';
+router.use('/api/fallback', fallbackRouter.routes(), fallbackRouter.allowedMethods());
 
 /* / */
+
 import mainApp from './apps/main';
-router.use('*', mainApp.routes(), mainApp.allowedMethods());
+router.get('/', mainApp);
+router.get('/dashboard', function * () {
+	this.redirect('/dashboard/domains');
+});
+router.get('/dashboard*', mainApp);
 
 // export
 

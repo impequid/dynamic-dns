@@ -8,13 +8,13 @@ import request from 'superagent';
 
 // import internal
 
-import config from '../config';
-import {applyLogin, getIP} from '../utilities';
-import impequidDatabase from '../database/impequid';
+import config from '../../config';
+import {applyLogin, getIP, removeLogin} from '../../utilities';
+import impequidDatabase from '../../database/impequid';
 
 // components
 
-import Captcha from '../apps/captcha';
+import Captcha from '../../apps/captcha';
 
 // routes
 const router = koaRouter();
@@ -35,20 +35,31 @@ router.get('/:token@:server', function * () {
 					if (!error) {
 						resolve(response.body);
 					} else {
-						reject(error);
+						reject('invalid token');
 					}
 				});
 		});
 
 		try { // returning user
 			const user = yield impequidDatabase.getUser({
-				impequid: {
-					id: impequidResponse.user,
-					server
-				}
+				impequidId: impequidResponse.user,
+				impequidServer: server
 			});
-			applyLogin(this, user);
-			this.redirect('/');
+			try {
+				yield impequidDatabase.setUser({
+					impequidId: impequidResponse.user,
+					impequidServer: server,
+					impequidToken: token
+				});
+				applyLogin(this, user);
+				this.redirect('/dashboard');
+			} catch (error) {
+				console.log(error);
+				this.body = {
+					error: 'could not update token'
+				};
+				this.status = 500;
+			}
 		} catch (error) { // new user
 			this.body = ReactDOM.renderToString(
 				<Captcha initialState={{
@@ -63,7 +74,7 @@ router.get('/:token@:server', function * () {
 		}
 	} catch (error) {
 		this.body = {
-			error: 'Could not contact impequid server, is it down?'
+			error: 'Could not verify impequid token.'
 		};
 		this.status = 500;
 	}
@@ -76,12 +87,10 @@ router.post('/finish', body, function * () {
 	const {captcha, token, server} = this.request.body;
 	const ip = getIP(this);
 
-	console.log(captcha, token, server);
-
 	// verify captcha
 
 	try {
-		// yield recaptchaValidator.promise(config.reCaptcha.secret, captcha, ip);
+		yield recaptchaValidator.promise(config.reCaptcha.secret, captcha, ip);
 
 		// verify token
 
@@ -100,14 +109,10 @@ router.post('/finish', body, function * () {
 			});
 
 			const entry = yield impequidDatabase.setUser({
-				impequid: {
-					id: impequidResponse.user,
-					server,
-					token
-				}
+				impequidId: impequidResponse.user,
+				impequidServer: server,
+				impequidToken: token
 			});
-
-			console.log(entry);
 
 			applyLogin(this, entry);
 
@@ -128,6 +133,15 @@ router.post('/finish', body, function * () {
 		};
 		this.status = 403;
 	}
+});
+
+/**
+ * @description logout
+ */
+router.delete('/', function * () {
+
+	removeLogin(this);
+
 });
 
 export default router;

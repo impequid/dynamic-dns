@@ -6,9 +6,6 @@ import React from 'react';
 import store from '../stores/captcha';
 import actions from '../actions/captcha';
 
-// components
-import Footer from './footer';
-
 export default class Captcha extends React.Component {
 
 	constructor () {
@@ -31,8 +28,12 @@ export default class Captcha extends React.Component {
 		return (
 			<div>
 				<main>
+					<div className="jumbotron custom-noradius">
+						<div className="container">
+							<h1>Just One More Step</h1>
+						</div>
+					</div>
 					<div style={{width: '304px', marginLeft: 'auto', marginRight: 'auto'}}>
-						<h3>Just One More Step</h3>
 						<fieldset className="form-group">
 							<label>Captcha</label><br/>
 							<ReCaptcha verifyCallback={actions.update} sitekey={state.reCaptchaKey}/>
@@ -47,7 +48,6 @@ export default class Captcha extends React.Component {
 						{state.user}@{state.server}
 					</div>
 				</main>
-				<Footer/>
 			</div>
 		);
 	}

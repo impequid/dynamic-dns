@@ -1,5 +1,5 @@
 const defaultConfig = {
-	"excluded": ["dns"],
+	"excluded": ["dns", "null", "undefined"],
 	listenAddress: '0.0.0.0',
 	port: 44400,
 	maxDomains: 3,
@@ -23,7 +23,7 @@ const defaultConfig = {
 		name: 'Impequid DynDNS'
 	},
 	impequid: {
-		defaultServer: 'dodekeract.smartfl.at:8080'
+		defaultServer: 'os.dodekeract.report'
 	}
 };
 

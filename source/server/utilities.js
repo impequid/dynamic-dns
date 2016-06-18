@@ -6,8 +6,19 @@ import crypto from 'crypto';
  * @description creates a user session
  */
 export function applyLogin (context, user) {
-	context.session.impequid = user.impequid;
+	context.session.impequidId = user.impequidId;
+	context.session.impequidServer = user.impequidServer;
 	context.session.id = user._id;
+}
+
+/**
+ * @description logout
+ */
+export function removeLogin (context) {
+	context.session = null;
+	context.body = {
+		success: true
+	};
 }
 
 /**
@@ -21,11 +32,12 @@ export function getIP (context) {
  * @description get login information from a session
  */
 export function getUser (context) {
-	if (context.session.impequid) {
+	if (context.session.impequidId) {
 		return {
 			valid: true,
-			id: context.session.impequid.id,
-			server: context.session.impequid.server
+			impequidId: context.session.impequidId,
+			impequidServer: context.session.impequidServer,
+			id: context.session.id
 		}
 	} else {
 		return {
