@@ -31,7 +31,7 @@ Currently, you have to add a `config.json` file to the `impequid-dynamic-dns` di
 	"domain": "your.domain",
 	"excluded": ["list", "of", "subdomains", "you", "dont", "want", "to", "allow"],
 	"listen": {
-		"port": 44401,
+		"port": 40000,
 		"address": "127.0.0.1"
 	}
 }
