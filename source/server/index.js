@@ -11,11 +11,11 @@ import mongoose from 'mongoose';
 // import internal
 
 import config from './config';
-import './domains';
 import router from './routes';
 
 // mongoose
 
+mongoose.set('debug', config.mongo.debug);
 mongoose.connect(config.mongo.url);
 
 // koa
@@ -45,8 +45,8 @@ app
 
 // start server
 
-server.listen(config.port, config.listenAddress);
+server.listen(config.listen.port, config.listen.address);
 
-server.on('listening', function () {
-	console.log(`listening on http://${config.listenAddress}:${config.port}`)
+server.on('listening', () => {
+	console.log(`listening on http://${config.listen.address}:${config.listen.port}`)
 });

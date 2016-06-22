@@ -5,6 +5,7 @@ import recaptchaValidator from 'recaptcha-validator';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import request from 'superagent';
+import ImpequidAPI from 'impequid-api';
 
 // import internal
 
@@ -24,32 +25,30 @@ const body = koaBody();
  * @description react authentication app with captcha for new users
  */
 router.get('/:token@:server', function * () {
+
 	const {token, server} = this.params;
 
 	try {
-		const impequidResponse = yield new Promise((resolve, reject) => {
-			request
-				.get(`http://${server}/api/external/verify`)
-				.set('token', token)
-				.end((error, response) => {
-					if (!error) {
-						resolve(response.body);
-					} else {
-						reject('invalid token');
-					}
-				});
-		});
+		const impequidResponse = yield (async function () {
+			const iqa = new ImpequidAPI({token, server, debug: true});
+			iqa.token = await iqa.getBackgroundToken();
+			const user = await iqa.getUser();
+			return {
+				id: user.id,
+				token: iqa.token
+			};
+		})();
 
 		try { // returning user
 			const user = yield impequidDatabase.getUser({
-				impequidId: impequidResponse.user,
+				impequidId: impequidResponse.id,
 				impequidServer: server
 			});
 			try {
 				yield impequidDatabase.setUser({
-					impequidId: impequidResponse.user,
+					impequidId: impequidResponse.id,
 					impequidServer: server,
-					impequidToken: token
+					impequidToken: impequidResponse.token
 				});
 				applyLogin(this, user);
 				this.redirect('/dashboard');
@@ -64,7 +63,7 @@ router.get('/:token@:server', function * () {
 			this.body = ReactDOM.renderToString(
 				<Captcha initialState={{
 					server,
-					token,
+					token: impequidResponse.token,
 					user: impequidResponse.id,
 					reCaptchaKey: config.reCaptcha.public,
 					links: config.links,
@@ -89,27 +88,23 @@ router.post('/finish', body, function * () {
 
 	// verify captcha
 
+	console.log(captcha, token, server);
+
 	try {
 		yield recaptchaValidator.promise(config.reCaptcha.secret, captcha, ip);
 
 		// verify token
 
 		try {
-			const impequidResponse = yield new Promise((resolve, reject) => {
-				request
-					.get(`http://${server}/api/external/verify`)
-					.set('token', token)
-					.end((error, response) => {
-						if (!error) {
-							resolve(response.body);
-						} else {
-							reject(error);
-						}
-					});
-			});
+			const id = yield (async function (resolve, reject) {
+				const iqa = new ImpequidAPI({token, server, debug: true});
+				const user = await iqa.getUser();
+				console.log(user);
+				return user.id
+			})();
 
 			const entry = yield impequidDatabase.setUser({
-				impequidId: impequidResponse.user,
+				impequidId: id,
 				impequidServer: server,
 				impequidToken: token
 			});

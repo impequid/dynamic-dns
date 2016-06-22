@@ -39,7 +39,7 @@ export default class Header extends React.Component {
 			);
 			rightEntries.push(
 				<li key={leftKey++} className="nav-item">
-					<a className="nav-link" href={`https://${state.impequid.defaultServer}/authenticate/${state.server.url}/background,name,notify`}>Login</a>
+					<a className="nav-link" href={`https://${state.impequid.defaultServer}/authenticate/${state.server.url}/background[user[id,name],notify]`}>Login</a>
 				</li>
 			);
 		}

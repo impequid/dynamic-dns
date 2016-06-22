@@ -16,11 +16,13 @@ import MainComponent from '../../apps/main';
 // routes
 
 export default function * render () {
-	const path = this.url;
+	let path = this.url;
 
 	const user = getUser(this);
 
-	if (user.valid) {
+	if (user.valid && path === '/') {
+		this.redirect('/dashboard/domains');
+	} else if (user.valid) {
 		try {
 			const domains = yield domainDatabase.list({user});
 			try {

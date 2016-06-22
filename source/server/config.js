@@ -1,7 +1,9 @@
 const defaultConfig = {
-	"excluded": ["dns", "null", "undefined"],
-	listenAddress: '0.0.0.0',
-	port: 44400,
+	"excluded": ["dns", "null", "undefined", "www"],
+	"listen": {
+		"address": "127.0.0.1",
+		"port": 40000
+	},
 	maxDomains: 3,
 	session: {
 		"keys": [],
@@ -12,18 +14,19 @@ const defaultConfig = {
 		"public": ""
 	},
 	"links": {
-		"privacyPolicy": "https://github.com/dodekeract/impequid-dyndns/tree/master/documentation/privacy-policy.md",
-		"termsOfService": "https://github.com/dodekeract/impequid-dyndns/tree/master/documentation/terms-of-service.md"
+		"privacyPolicy": "https://github.com/dodekeract/impequid-dynamic-dns/tree/master/documentation/privacy-policy.md",
+		"termsOfService": "https://github.com/dodekeract/impequid-dynamic-dns/tree/master/documentation/terms-of-service.md"
 	},
 	mongo: {
-		url: 'mongodb://localhost/impequid-dyndns'
+		url: 'mongodb://127.0.0.1/impequid-dynamic-dns',
+		debug: false
 	},
 	server: {
-		url: 'unknown.url',
-		name: 'Impequid DynDNS'
+		domain: 'example.domain',
+		name: 'Impequid Dynamic DNS'
 	},
 	impequid: {
-		defaultServer: 'os.dodekeract.report'
+		defaultServer: 'impequid.com'
 	}
 };
 

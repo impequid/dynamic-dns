@@ -1,21 +1,26 @@
-# Impequid DynDNS
+# Impequid Dynamic DNS
 
-A simple CloudFlare-based dynamic DNS server.
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Code Climate](https://codeclimate.com/github/dodekeract/impequid-dynamic-dns/badges/gpa.svg)](https://codeclimate.com/github/dodekeract/impequid-dynamic-dns)
+[![NPM Downloads](https://img.shields.io/npm/dm/impequid-dynamic-dns.svg)](https://npmjs.com/package/impequid-dynamic-dns)
+[![NPM Dependencies](https://david-dm.org/dodekeract/impequid-dynamic-dns.svg)](https://david-dm.org/dodekeract/impequid-dynamic-dns)
+[![Gitter Chatroom](https://badges.gitter.im/dodekeract/impequid.svg)](https://gitter.im/dodekeract/impequid)
+
+A simple CloudFlare-based dynamic DNS server, uses [Impequid](https://github.com/dodekeract/impequid) for authentication.
 
 ## Installation
 
 - Install [Node.js](https://nodejs.org)
-- `npm install impequid-dyndns -g`
-
-## Dependencies
-
-- This project needs a MongoDB database to store the user accounts and domain names.
+- Install [MongoDB](https://mongodb.org)
+- `git clone https://github.com/dodekeract/impequid-dynamic-dns`
+- `cd impequid-dynamic-dns`
+- `npm install`
+- `npm run build`
+- `npm run start`
 
 ## Configuration
 
-You need to create a folder for `impequid-dyndns`.  
-It's recommended to use `/etc/impequid-dyndns/` with `chown impequid-dyndns:impequid-dyndns` and `chmod 700`, so nobody can get your CloudFlare token.  
-This folder also needs a `config.json`:
+Currently, you have to add a `config.json` file to the `impequid-dynamic-dns` directory. It may look like this:
 
 ````json
 {
@@ -25,35 +30,13 @@ This folder also needs a `config.json`:
 	},
 	"domain": "your.domain",
 	"excluded": ["list", "of", "subdomains", "you", "dont", "want", "to", "allow"],
-	"port": 80,
-	"listen": "0.0.0.0"
+	"listen": {
+		"port": 44401,
+		"address": "127.0.0.1"
+	}
 }
 ````
 
-`port` and `listen` are optional and default to the above values.
-
-## Usage
-
-To start the server, just run `impequid-dyndns` after creating a config file.
-
-If you chose a different folder than `/etc/impequid-dyndns`, use `impequid-dyndns --folder /path/to/folder`.
-
 ## API
 
-### Update DNS
-
-- `GET /update/:token` → update ip (use this on your router/server!)
-
-### Domains
-
-- `GET /domains` → domain list
-- `PUT /domains` → add domain
-- `POST /domains` → new token for domain
-- `DELETE /domains` → remove domain
-
-### Login
-
-- `GET /login` → shows user data
-- `PUT /login` → logs user in
-- `POST /login` → creates new user
-- `DELETE /login` → logs user out
+See [here](documentation/api.md)

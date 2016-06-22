@@ -45,9 +45,9 @@ export default class Home extends React.Component {
 						<div className="col-lg-4">
 							<h2>Open Source</h2>
 							<p>
-								{state.server.name} is an instance of the MIT licensed Impequid DynDNS, this means you can easily setup your own DynDNS provider, read the source-code or even contribute.
+								{state.server.name} is an instance of the MIT licensed Impequid Dynamic DNS, this means you can easily setup your own Dynamic DNS provider, read the source-code or even contribute.
 							</p>
-							<p><a className="btn btn-secondary" href="https://github.com/dodekeract/impequid-dyndns" role="button">View On GitHub &raquo;</a></p>
+							<p><a className="btn btn-secondary" href="https://github.com/dodekeract/impequid-dynamic-dns" role="button">View On GitHub &raquo;</a></p>
 						</div>
 					</div>
 				</div>

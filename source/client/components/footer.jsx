@@ -8,8 +8,8 @@ export default class Footer extends React.Component {
 
 		return state.user.valid ? null : (
 			<footer className="text-muted">
-				<div className="container custom-text-center">
-					<p>{state.server.name} is an OpenSource CloudFlare-based DynDNS server. You can check the source code on <a href="https://github.com/dodekeract/impequid-dyndns">GitHub</a> and even set-up your own instance!</p>
+				<div className="container text-xs-center">
+					<p>{state.server.name} is an OpenSource CloudFlare-based Dynamic DNS server. You can check the source code on <a href="https://github.com/dodekeract/impequid-dynamic-dns">GitHub</a> and even set-up your own instance!</p>
 				</div>
 			</footer>
 		);
