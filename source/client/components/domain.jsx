@@ -13,14 +13,16 @@ export default class Domain extends React.Component {
 		const historyView = [];
 		let key = 0;
 
-		state.history.reverse().forEach(item => {
-			historyView.push(
-				<li className="list-group-item" key={key++}>
-					<span className="label label-default label-pill pull-xs-right">{new Date(item.time).toTimeString()}</span>
-					{item.ip}
-				</li>
-			);
-		});
+		if (state.history) {
+			state.history.reverse().forEach(item => {
+				historyView.push(
+					<li className="list-group-item" key={key++}>
+						<span className="label label-default label-pill pull-xs-right">{new Date(item.time).toTimeString()}</span>
+						{item.ip}
+					</li>
+				);
+			});
+		}
 
 		return state.subdomain ? (
 			<div className="card">
