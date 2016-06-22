@@ -10,11 +10,21 @@ import {setIP} from '../domains';
 // helper functions
 
 export function userifyDomain (domain) {
+	const history = [];
+	if (domain.history) {
+		domain.history.forEach(item => {
+			history.push({
+				time: item.time,
+				ip: item.ip
+			});
+		});
+	}
 	return {
 		subdomain: domain.subdomain,
 		token: domain.token,
 		ip: domain.ip,
-		user: domain.user
+		user: domain.user,
+		history
 	}
 }
 
@@ -63,10 +73,20 @@ export function update ({token, ip}) {
 						subdomain: entry.subdomain,
 						ip
 					}).then(data => {
-
 						// save IP to database
-
 						entry.ip = ip;
+
+						// add ip to history
+						entry.history.push({
+							ip
+						});
+
+						// limit history to 10
+						if (entry.history.length >= 10) {
+							entry.history.shift();
+						}
+
+						// save entry to database
 						entry.save((error, data) => {
 							if (!error) {
 								resolve(userifyDomain(data));

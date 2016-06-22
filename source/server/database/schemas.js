@@ -31,6 +31,16 @@ export const domainSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		required: true
 	},
+	history: [{
+		time: {
+			type: Date,
+			default: Date.now
+		},
+		ip: {
+			type: String,
+			validate: [isIP, 'invalid history ip']
+		}
+	}],
 	subdomain: {
 		type: String,
 		unique: true,
