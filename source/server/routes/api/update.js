@@ -13,6 +13,8 @@ router.get('/:token', function * () {
 	const {token} = this.params;
 	const ip = getIP(this);
 
+	console.log(token, ip);
+
 	try {
 		const result = yield domainDatabase.update({token, ip});
 		this.body = result;
