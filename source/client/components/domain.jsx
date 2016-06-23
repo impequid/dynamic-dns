@@ -1,6 +1,7 @@
 // import external
 
 import React from 'react';
+import TimeAgo from 'react-timeago';
 
 // component
 
@@ -27,6 +28,7 @@ export default class Domain extends React.Component {
 						</div>
 					</div>
 					<HistoryView history={state.history} page={page} domain={state.subdomain}/>
+					<Pagination history={state.history} page={page} linkPrefix={`/dashboard/domains/${state.subdomain}`}/>
 					<div className="btn-group btn-group-justified btn-block">
 						<a href={`http://${state.subdomain}.${state.domain}`} target="_blank" className="btn btn-success custom-3-buttons">Open</a>
 						<a href={`/api/fallback/newToken/${state.token}`} onClick={actions.updateSubdomainToken.bind(state.token)} className="btn btn-warning custom-3-buttons">New Update Link</a>
@@ -49,26 +51,25 @@ class HistoryView extends React.Component {
 	render () {
 		const {history, page, domain} = this.props;
 
+		if (!history) return null;
+
 		const historyView = [];
 
-		if (history) {
-			for (let key = 0; key < 5; key++) {
-				let item = history[history.length - 1 - (page * 5 + key)];
-				if (item) {
-					historyView.push(
-						<li className="list-group-item" key={key}>
-							<span className="label label-default label-pill pull-xs-right">{new Date(item.time).toTimeString()}</span>
-							{item.ip}
-						</li>
-					);
-				}
+		for (let key = 0; key < 5; key++) {
+			let item = history[history.length - 1 - (page * 5 + key)];
+			if (item) {
+				historyView.push(
+					<li className="list-group-item" key={key}>
+						<span className="label label-default label-pill pull-xs-right"><TimeAgo date={item.time}/></span>
+						{item.ip}
+					</li>
+				);
 			}
 		}
 
 		return historyView.length ? (
 			<ul className="list-group">
 				{historyView}
-				<Pagination page={page} count={history.length} linkPrefix={`/dashboard/domains/${domain}`}/>
 			</ul>
 		) : null;
 	}
@@ -78,19 +79,29 @@ class HistoryView extends React.Component {
 class Pagination extends React.Component {
 	render () {
 
-		const {page, count, linkPrefix} = this.props;
+		const {page, history, linkPrefix} = this.props;
 
-		const max = Math.floor(count / 5);
+		// don't display if not needed
+		if (!history || history.length === 0) return null;
+
+		const max = Math.ceil(history.length / 5);
+
+		// fix spacing if pagination is unnecessary
+		if (max === 1) return (<br/>);
+
+		// middle section
 
 		const pages = [];
 
-		for (let key = 0; key < max + 1; key++) {
+		for (let key = 0; key < max; key++) {
 			pages.push(page === key ? (
-				<li className="page-item active" key={key}><span className="page-link">{Number(key)+1}</span></li>
+				<li className="page-item active" key={key}><span className="page-link">{key + 1}</span></li>
 			) : (
-				<li className="page-item" key={key}><a className="page-link" href={`${linkPrefix}/${key}`}>{Number(key)+1}</a></li>
+				<li className="page-item" key={key}><a className="page-link" href={`${linkPrefix}/${key}`}>{key + 1}</a></li>
 			));
 		}
+
+		// left section
 
 		const back = page === 0 ? (
 			<li className="page-item disabled">
@@ -105,7 +116,10 @@ class Pagination extends React.Component {
 				</a>
 			</li>
 		);
-		const forward = page === max ? (
+
+		// right section
+
+		const forward = page === max - 1 ? (
 			<li className="page-item disabled">
 				<span className="page-link">
 					<span aria-hidden="true">&raquo;</span>
@@ -113,7 +127,7 @@ class Pagination extends React.Component {
 			</li>
 		) : (
 			<li className="page-item">
-				<a className="page-link" href={`${linkPrefix}/${max}`}>
+				<a className="page-link" href={`${linkPrefix}/${max - 1}`}>
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>

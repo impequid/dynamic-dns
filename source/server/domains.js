@@ -58,26 +58,15 @@ export function setIP ({subdomain, ip}) {
 
 				record.content = ip;
 				record.type = isIP(ip, 4) ? 'A' : 'AAAA';
-				cloudflare.editDNS(record).then((data) => {
-					resolve(data);
-				}).catch((error) => {
-					console.error(error);
-					reject(error);
-				});
+				cloudflare.editDNS(record).then(resolve).catch(reject);
 			} else {
 				const record = createRecord(subdomain, ip);
 				cloudflare.addDNS(record).then((data) => {
 					console.log(`registered new subdomain ${data.name}`);
 					resolve(data);
-				}).catch((error) => {
-					console.error(error);
-					reject(error);
-				});
+				}).catch(reject);
 			}
-		}).catch(error => {
-			console.error(error);
-			reject(error);
-		});
+		}).catch(reject);
 	});
 }
 
