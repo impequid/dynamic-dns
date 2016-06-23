@@ -23,6 +23,7 @@ const App = React.createClass({
 		'/dashboard': 'dashboard',
 		'/dashboard/:view/': 'dashboard',
 		'/dashboard/:view/:item': 'dashboard',
+		'/dashboard/:view/:item/:page': 'dashboard',
 		'/authenticate': 'authenticate'
 	},
 
@@ -46,10 +47,11 @@ const App = React.createClass({
 		);
 	},
 
-	dashboard (view, item) {
+	dashboard (view, item, page = 0) {
 		if (typeof item !== 'string') item = null;
+		if (typeof page !== 'string') page = 0;
 		return (
-			<Dashboard view={view} item={item} state={this.state} actions={actions}/>
+			<Dashboard view={view} item={item} page={Number(page)} state={this.state} actions={actions}/>
 		);
 	},
 

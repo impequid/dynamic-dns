@@ -45,7 +45,6 @@ export default class Captcha extends React.Component {
 							<small className="text-muted">TLDR: Your data is used to make {state.serverName} work.</small>
 						</fieldset>
 						<button onClick={actions.submit} className="btn btn-success btn-lg btn-block">Submit</button>
-						{state.user}@{state.server}
 					</div>
 				</main>
 			</div>

@@ -81,8 +81,8 @@ export function update ({token, ip}) {
 							ip
 						});
 
-						// limit history to 10
-						if (entry.history.length >= 10) {
+						// limit history to 100
+						if (entry.history.length > 100) {
 							entry.history.shift();
 						}
 

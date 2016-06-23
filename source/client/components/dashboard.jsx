@@ -19,7 +19,7 @@ export default class Dashboard extends React.Component {
 
 	render () {
 
-		const {actions, item, state, view} = this.props;
+		const {actions, item, state, view, page} = this.props;
 
 		// match appropriate view component
 
@@ -40,13 +40,10 @@ export default class Dashboard extends React.Component {
 							<li className="nav-item">
 								<a className={`nav-link${isView(view, 'domains')}`} href="/dashboard/domains">Domains</a>
 							</li>
-							{/*<li className="nav-item">
-								<a className={`nav-link${isView(view, 'settings')}`} href="/dashboard/settings">Settings</a>
-							</li>*/}
 						</ul>
 					</div>
 				</nav>
-				<ViewComponent state={state} actions={actions} item={item}/>
+				<ViewComponent page={page} state={state} actions={actions} item={item}/>
 			</div>
 		);
 	}
@@ -56,11 +53,7 @@ export class DomainView extends React.Component {
 
 	render () {
 
-		const {actions, item, state, view} = this.props;
-
-		const domainState = item ? {
-			// : state.domains.
-		} : null;
+		const {actions, item, state, view, page} = this.props;
 
 		let currentDomain = {
 			domain: null
@@ -95,7 +88,7 @@ export class DomainView extends React.Component {
 						)}
 					</div>
 					<div className="col-md-6">
-						<Domain actions={actions} state={currentDomain}/>
+						<Domain actions={actions} page={page} state={currentDomain}/>
 					</div>
 				</div>
 			</main>
