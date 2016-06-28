@@ -1,6 +1,8 @@
 import EventEmitter from 'events';
 
-const CHANGE = 'CHANGE';
+let _state = {};
+
+let CHANGE = 'CHANGE';
 
 class Store extends EventEmitter {
 	constructor () {

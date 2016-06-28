@@ -1,12 +1,12 @@
 {
   "name": "impequid-dynamic-dns",
   "version": "0.0.1",
-  "description": "Impequid app for CloudFlare-based DynDNS servers.",
+  "description": "Impequid app for CloudFlare-based Dynamic DNS servers.",
   "main": "build/",
   "scripts": {
     "build": "npm run compile --silent && npm run copy --silent && npm run bundle-captcha --silent && npm run bundle-main --silent",
     "bundle-main": "webpack --progress --colors build/client/apps/main.js build/client/bundle/main.js",
-    "bundle-captcha": "webpack --progress --colors build/client/apps/captcha.js build/client/bundle/captcha.js",
+    "bundle-captcha": "webpack --progress --colors build/server/apps/captcha-client.js build/client/bundle/captcha.js",
     "copy": "cp -r source/client/styles/ build/client/",
     "compile": "babel --plugins transform-async-to-generator --presets es2015,react source/ -d build/",
     "postpublish": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",

@@ -24,7 +24,9 @@ export default class Captcha extends React.Component {
 	}
 
 	render () {
-		const state = this.state;
+
+		const {state} = this;
+
 		return (
 			<div>
 				<main>

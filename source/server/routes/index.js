@@ -1,5 +1,15 @@
 // import external
+
 import koaRouter from 'koa-router';
+
+// import internal
+
+import domainRouter from './api/domains';
+import updateRouter from './api/update';
+import authenticateRouter from './api/authenticate';
+import fallbackRouter from './api/fallback';
+
+import mainApp from './apps/main';
 
 // setup main router
 
@@ -11,29 +21,15 @@ router.get('/favicon.ico', function * () {
 	this.redirect('https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/12-cube.svg/64px-12-cube.svg.png');
 });
 
-/* /api/domains */
+// api
 
-import domainRouter from './api/domains';
 router.use('/api/domain', domainRouter.routes(), domainRouter.allowedMethods());
-
-/* /api/update */
-
-import updateRouter from './api/update';
 router.use('/api/update', updateRouter.routes(), updateRouter.allowedMethods());
-
-/* /api/authenticate */
-
-import authenticateRouter from './api/authenticate';
 router.use('/api/authenticate', authenticateRouter.routes(), authenticateRouter.allowedMethods());
-
-/* /api/fallback */
-
-import fallbackRouter from './api/fallback';
 router.use('/api/fallback', fallbackRouter.routes(), fallbackRouter.allowedMethods());
 
-/* / */
+// main app
 
-import mainApp from './apps/main';
 router.get('/', mainApp);
 router.get('/dashboard', function * () {
 	this.redirect('/dashboard/domains');

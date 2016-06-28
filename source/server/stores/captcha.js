@@ -31,7 +31,7 @@ dispatcher.register(action => {
 	console.info('captcha-store', action.type);
 
 	switch (action.type) {
-		case constants.HYDRATE:
+		case constants.hydrate:
 			_state.user = action.data.user;
 			_state.token = action.data.token;
 			_state.server = action.data.server;
@@ -39,7 +39,7 @@ dispatcher.register(action => {
 			_state.serverName = action.data.serverName;
 			_state.links = action.data.links;
 		break;
-		case constants.SUBMIT:
+		case constants.submit:
 			if (_state.accepted) {
 				request
 					.post('/api/authenticate/finish')
@@ -63,10 +63,10 @@ dispatcher.register(action => {
 				alert('You need to accept the privacy policy and terms of service');
 			}
 		break;
-		case constants.UPDATE:
+		case constants.update:
 			_state.captcha = action.value;
 		break;
-		case constants.ACCEPT:
+		case constants.accept:
 			_state.accepted = action.value;
 		break;
 	}

@@ -1,23 +1,17 @@
 // import external
+
 import koaRouter from 'koa-router';
 import koaBody from 'koa-body';
-import recaptchaValidator from 'recaptcha-validator';
-import React from 'react';
-import ReactDOM from 'react-dom/server';
-import request from 'superagent';
-import ImpequidAPI from 'impequid-api';
 
 // import internal
 
 import config from '../../config';
 import {applyLogin, getIP, removeLogin} from '../../utilities';
 import impequidDatabase from '../../database/impequid';
-
-// components
-
-import Captcha from '../../apps/captcha';
+import actions from '../../actions';
 
 // routes
+
 const router = koaRouter();
 const body = koaBody();
 
@@ -29,15 +23,7 @@ router.get('/:token@:server', function * () {
 	const {token, server} = this.params;
 
 	try {
-		const impequidResponse = yield (async function () {
-			const iqa = new ImpequidAPI({token, server, debug: true});
-			iqa.token = await iqa.getBackgroundToken();
-			const user = await iqa.getUser();
-			return {
-				id: user.id,
-				token: iqa.token
-			};
-		})();
+		const impequidResponse = yield actions.impequid.verify({token, server});
 
 		try { // returning user
 			const user = yield impequidDatabase.getUser({
@@ -53,29 +39,13 @@ router.get('/:token@:server', function * () {
 				applyLogin(this, user);
 				this.redirect('/dashboard');
 			} catch (error) {
-				console.log(error);
-				this.body = {
-					error: 'could not update token'
-				};
-				this.status = 500;
+				actions.error.couldNotUpdateToken(this, error);
 			}
 		} catch (error) { // new user
-			this.body = ReactDOM.renderToString(
-				<Captcha initialState={{
-					server,
-					token: impequidResponse.token,
-					user: impequidResponse.id,
-					reCaptchaKey: config.reCaptcha.public,
-					links: config.links,
-					serverName: config.server.name
-				}}/>
-			);
+			this.body = actions.render.captcha({server, impequidResponse});
 		}
 	} catch (error) {
-		this.body = {
-			error: 'Could not verify impequid token.'
-		};
-		this.status = 500;
+		actions.error.couldNotVerifyImpequidToken(this, error);
 	}
 });
 
@@ -83,25 +53,16 @@ router.get('/:token@:server', function * () {
  * @description after finishing captcha
  */
 router.post('/finish', body, function * () {
+
 	const {captcha, token, server} = this.request.body;
-	const ip = getIP(this);
 
-	// verify captcha
-
-	console.log(captcha, token, server);
-
-	try {
-		yield recaptchaValidator.promise(config.reCaptcha.secret, captcha, ip);
-
-		// verify token
-
-		try {
-			const id = yield (async function (resolve, reject) {
-				const iqa = new ImpequidAPI({token, server, debug: true});
-				const user = await iqa.getUser();
-				console.log(user);
-				return user.id
-			})();
+	try { // verify captcha
+		yield actions.captcha.verify({
+			captcha,
+			ip: getIP(this)
+		});
+		try { // verify token
+			const id = yield actions.impequid.getUserID({token, server});
 
 			const entry = yield impequidDatabase.setUser({
 				impequidId: id,
@@ -111,32 +72,23 @@ router.post('/finish', body, function * () {
 
 			applyLogin(this, entry);
 
-			this.body = {
-				success: true
-			};
+			actions.success.generic(this);
 		} catch (error) {
-			console.error(error);
-			this.body = {
-				error: 'invalid token'
-			};
-			this.status = 403;
+			actions.error.invalidToken(this, error);
 		}
 
 	} catch (error) {
-		this.body = {
-			error: 'captcha failed'
-		};
-		this.status = 403;
+		actions.error.captchaFailed(this, error);
 	}
 });
 
 /**
  * @description logout
+ * @http DELETE /api/authenticate
  */
 router.delete('/', function * () {
-
 	removeLogin(this);
-
+	actions.success.generic(this);
 });
 
 export default router;

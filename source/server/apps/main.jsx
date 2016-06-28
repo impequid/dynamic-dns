@@ -1,8 +1,14 @@
+// import external
+
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
+// import internal
+
 import App from '../../client/components/main';
 import actions from '../../client/actions/main';
+
+// functions
 
 export default class ServerSideMain extends React.Component {
 

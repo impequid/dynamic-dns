@@ -2,6 +2,10 @@
 
 import crypto from 'crypto';
 
+// import internal
+
+import actions from './actions';
+
 /**
  * @description creates a user session
  */
@@ -61,6 +65,13 @@ export function loginify (context, callback) {
 		// TODO investigate this hack
 		return [];
 	}
+}
+
+export function * login (next) {
+	this.user = getUser(this);
+	if (this.user.valid) {
+		yield next;
+	} else actions.error.unauthorized(this);
 }
 
 /**

@@ -80,7 +80,7 @@ export class DomainView extends React.Component {
 							<input name="subdomain" onChange={actions.updateAddSubdomain} type="text" className="form-control" style={{borderRight: 0}} placeholder="Your Subdomain"/>
 							<span className="input-group-addon">.{state.server.domain}</span>
 							<span className="input-group-btn">
-								<input type="submit" className="btn btn-success" value="Add Subdomain"/>
+								<input type="submit" className="btn btn-success" value="Add"/>
 							</span>
 						</form>
 						{state.server.maxDomains - state.domains.length === 0 ? null : (

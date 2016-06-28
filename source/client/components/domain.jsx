@@ -31,7 +31,7 @@ export default class Domain extends React.Component {
 					<Pagination history={state.history} page={page} linkPrefix={`/dashboard/domains/${state.subdomain}`}/>
 					<div className="btn-group btn-group-justified btn-block">
 						<a href={`http://${state.subdomain}.${state.domain}`} target="_blank" className="btn btn-success custom-3-buttons">Open</a>
-						<a href={`/api/fallback/newToken/${state.token}`} onClick={actions.updateSubdomainToken.bind(state.token)} className="btn btn-warning custom-3-buttons">New Update Link</a>
+						<a href={`/api/fallback/newToken/${state.token}`} onClick={actions.updateSubdomainToken.bind(state.token)} className="btn btn-warning custom-3-buttons">New Token</a>
 						<a href={`/api/fallback/removeSubdomain/${state.token}`} onClick={actions.removeSubdomain.bind(state.token)} className="btn btn-danger custom-3-buttons">Remove</a>
 					</div>
 				</div>

@@ -1,19 +1,28 @@
+// import external
+
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-import App from '../../client/components/captcha';
-import actions from '../../client/actions/captcha';
+// import internal
 
-export default class ServerSideAuthenticate extends React.Component {
+import App from '../components/captcha';
+import actions from '../actions/captcha';
+
+// functions
+
+export default class ServerSideCaptcha extends React.Component {
 
 	render () {
-		actions.hydrate(this.props.initialState);
+
+		const {initialState} = this.props;
+
+		actions.hydrate(initialState);
 
 		return (
 			<html>
 				<head>
-					<title>{this.props.initialState.serverName}</title>
-					<script dangerouslySetInnerHTML={{__html: `var INITIAL_STATE = JSON.parse('${JSON.stringify(this.props.initialState)}');`}}/>
+					<title>{initialState.serverName}</title>
+					<script dangerouslySetInnerHTML={{__html: `var INITIAL_STATE = JSON.parse('${JSON.stringify(initialState)}');`}}/>
 					<meta charSet="utf-8"/>
 					<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 

@@ -1,29 +1,27 @@
 // import external
+
 import koaRouter from 'koa-router';
 
 // import internal
-import domainDatabase from '../../database/domains';
+
 import {getIP} from '../../utilities';
+import actions from '../../actions';
 
 // routes
+
 const router = koaRouter();
 
 router.get('/:token', function * () {
-
-	const {token} = this.params;
-	const ip = getIP(this);
-
-	console.log(token, ip);
-
 	try {
-		const result = yield domainDatabase.update({token, ip});
-		this.body = result;
+		this.body = yield actions.domain.update({
+			token: this.params.token,
+			ip: getIP(this)
+		});
 	} catch (error) {
-		this.body = {
-			error: 'something went wrong'
-		};
-		this.status = 500;
+		actions.error.couldNotUpdateDomain(this, error);
 	}
 });
+
+// export
 
 export default router;

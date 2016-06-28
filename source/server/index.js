@@ -12,6 +12,7 @@ import mongoose from 'mongoose';
 
 import config from './config';
 import router from './routes';
+import './stores/server';
 
 // mongoose
 
