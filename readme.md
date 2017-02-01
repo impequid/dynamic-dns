@@ -1,12 +1,12 @@
 # Impequid Dynamic DNS
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
-[![Code Climate](https://codeclimate.com/github/dodekeract/impequid-dynamic-dns/badges/gpa.svg)](https://codeclimate.com/github/dodekeract/impequid-dynamic-dns)
-[![NPM Downloads](https://img.shields.io/npm/dm/impequid-dynamic-dns.svg)](https://npmjs.com/package/impequid-dynamic-dns)
-[![NPM Dependencies](https://david-dm.org/dodekeract/impequid-dynamic-dns.svg)](https://david-dm.org/dodekeract/impequid-dynamic-dns)
-[![Gitter Chatroom](https://badges.gitter.im/dodekeract/impequid.svg)](https://gitter.im/dodekeract/impequid)
+> A simple CloudFlare-based dynamic DNS server, uses [Impequid](https://github.com/dodekeract/impequid) for authentication.
 
-A simple CloudFlare-based dynamic DNS server, uses [Impequid](https://github.com/dodekeract/impequid) for authentication.
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Code Climate](https://codeclimate.com/github/impequid/dynamic-dns/badges/gpa.svg)](https://codeclimate.com/github/impequid/dynamic-dns)
+[![NPM Downloads](https://img.shields.io/npm/dm/impequid-dynamic-dns.svg)](https://npmjs.com/package/impequid-dynamic-dns)
+[![NPM Dependencies](https://david-dm.org/impequid/dynamic-dns.svg)](https://david-dm.org/impequid/dynamic-dns)
+[![Gitter Chatroom](https://badges.gitter.im/dodekeract/impequid.svg)](https://gitter.im/dodekeract/impequid)
 
 ## Installation
 
@@ -20,8 +20,10 @@ A simple CloudFlare-based dynamic DNS server, uses [Impequid](https://github.com
 
 ## Configuration
 
-Currently, you have to add a `config.json` file to the `impequid-dynamic-dns` directory. It may look like this:
+Currently, you have to add a `config.json` file to the `impequid-dynamic-dns` directory.
 
+<details>
+<summary>*Example:*</summary>
 ````json
 {
 	"cloudflare": {
@@ -36,6 +38,7 @@ Currently, you have to add a `config.json` file to the `impequid-dynamic-dns` di
 	}
 }
 ````
+</details>
 
 ## API
 
