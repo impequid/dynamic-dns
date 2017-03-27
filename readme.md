@@ -23,7 +23,8 @@
 Currently, you have to add a `config.json` file to the `dynamic-dns` directory.
 
 <details>
-<summary>*Example*</summary>
+<summary>Example</summary>
+
 ````json
 {
 	"cloudflare": {
