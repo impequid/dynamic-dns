@@ -6,7 +6,7 @@
 [![Code Climate](https://codeclimate.com/github/impequid/dynamic-dns/badges/gpa.svg)](https://codeclimate.com/github/impequid/dynamic-dns)
 [![NPM Downloads](https://img.shields.io/npm/dm/impequid-dynamic-dns.svg)](https://npmjs.com/package/impequid-dynamic-dns)
 [![NPM Dependencies](https://david-dm.org/impequid/dynamic-dns.svg)](https://david-dm.org/impequid/dynamic-dns)
-[![Gitter Chatroom](https://badges.gitter.im/dodekeract/impequid.svg)](https://gitter.im/dodekeract/impequid)
+[![Slack Chatroom](https://slack.dodekeract.com/badge.svg)](https://slack.dodekeract.com)
 
 ## Installation
 
